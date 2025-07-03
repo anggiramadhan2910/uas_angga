@@ -21,49 +21,31 @@ class CustomController extends Controller
     }
 
     // Menyimpan data custom baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
 
-        Custom::create($request->all());
-        return redirect()->route('customs.index')->with('success', 'Data berhasil ditambahkan.');
-    }
+// ...existing code...
 
-    // Menampilkan detail data custom
-    public function show($id)
-    {
-        $custom = Custom::findOrFail($id);
-        return view('customs.show', compact('custom'));
-    }
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+    ]);
 
-    // Menampilkan form edit data custom
-    public function edit($id)
-    {
-        $custom = Custom::findOrFail($id);
-        return view('customs.edit', compact('custom'));
-    }
+    Custom::create($request->all());
+    return redirect()->route('customs.index')->with('success', 'Data berhasil ditambahkan.');
+}
 
-    // Mengupdate data custom
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+    ]);
 
-        $custom = Custom::findOrFail($id);
-        $custom->update($request->all());
-        return redirect()->route('customs.index')->with('success', 'Data berhasil diupdate.');
-    }
+    $custom = Custom::findOrFail($id);
+    $custom->update($request->all());
+    return redirect()->route('customs.index')->with('success', 'Data berhasil diupdate.');
+}
 
-    // Menghapus data custom
-    public function destroy($id)
-    {
-        $custom = Custom::findOrFail($id);
-        $custom->delete();
-        return redirect()->route('customs.index')->with('success', 'Data berhasil dihapus.');
-    }
+// ...existing code...
 }
