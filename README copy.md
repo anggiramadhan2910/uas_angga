@@ -1,0 +1,1 @@
+Jalankan migration dan pastikan tabel di database
