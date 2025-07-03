@@ -2,63 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Custom;
 use Illuminate\Http\Request;
 
 class CustomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $customs = Custom::all();
+        return view('customs.index', compact('customs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('customs.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Custom::create($request->all());
+        return redirect()->route('customs.index')->with('success', 'Data berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $custom = Custom::findOrFail($id);
+        return view('customs.show', compact('custom'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $custom = Custom::findOrFail($id);
+        return view('customs.edit', compact('custom'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $custom = Custom::findOrFail($id);
+        $custom->update($request->all());
+        return redirect()->route('customs.index')->with('success', 'Data berhasil diupdate.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $custom = Custom::findOrFail($id);
+        $custom->delete();
+        return redirect()->route('customs.index')->with('success', 'Data berhasil dihapus.');
     }
 }
